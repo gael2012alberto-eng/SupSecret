@@ -3,321 +3,407 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andromeda - Roblox Ecosystem</title>
+    <title>Roblox Client - Web Experience</title>
     <style>
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #d1fae5, #ffffff, #a7f3d0, #ecfdf5);
-            background-size: 400% 400%;
-            animation: gradientAnimation 12s ease infinite;
-            color: #1f2937;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .container {
-            padding: 15px;
-            max-width: 600px;
-            margin: 0 auto;
-            flex: 1;
-            width: 100%;
+        * {
             box-sizing: border-box;
-            padding-bottom: 90px;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
-
-        /* Autenticación */
-        #auth-screen {
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        /* Barra Lateral */
+        .sidebar {
+            width: 240px;
+            background-color: #1a1a1a;
+            border-right: 1px solid #2d2d2d;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 85vh;
-            text-align: center;
+            padding: 24px 12px;
+            gap: 8px;
         }
-
-        .brand-title {
-            font-size: 40px;
+        .logo {
+            font-size: 26px;
             font-weight: 900;
-            background: linear-gradient(135deg, #047857, #10b981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 30px;
+            letter-spacing: 1.5px;
+            color: #ffffff;
+            margin-bottom: 24px;
+            padding-left: 12px;
         }
-
-        .btn {
-            width: 100%;
-            max-width: 300px;
-            padding: 14px;
-            margin: 8px 0;
-            border-radius: 25px;
-            font-size: 16px;
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: #b0b0b0;
+            text-align: left;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .nav-btn:hover, .nav-btn.active {
+            background-color: #2a2a2a;
+            color: #ffffff;
+        }
+        /* Contenedor Principal */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #121212;
+            position: relative;
+        }
+        /* Barra Superior */
+        .topbar {
+            height: 70px;
+            background-color: #1a1a1a;
+            border-bottom: 1px solid #2d2d2d;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 32px;
+            gap: 20px;
+        }
+        .badge {
+            background-color: #242424;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #333;
+        }
+        .robux-val { color: #00b06f; }
+        
+        /* Contenido de Vistas */
+        .view-content {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+            display: none;
+        }
+        .view-content.active {
+            display: block;
+        }
+        h1 { font-size: 32px; margin-bottom: 24px; font-weight: 800; }
+        
+        /* Cuadros y Cuadrículas de Juegos */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+        .game-card {
+            background-color: #1e1e1e;
+            border: 1px solid #2d2d2d;
+            border-radius: 14px;
+            padding: 20px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .game-card:hover {
+            border-color: #0084ff;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 132, 255, 0.15);
+        }
+        .game-card h3 { font-size: 18px; margin-bottom: 8px; }
+        .game-card p { font-size: 13px; color: #999; margin-bottom: 16px; }
+        
+        .btn-play {
+            background-color: #00b06f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
             font-weight: 700;
             cursor: pointer;
-            border: none;
-            transition: transform 0.2s;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
-        }
-
-        .btn:active { transform: scale(0.97); }
-        .btn-outline { background-color: #ffffff; color: #047857; border: 2px solid #34d399; }
-        .btn-solid { background: linear-gradient(135deg, #059669, #10b981); color: white; }
-
-        /* Pantalla Principal (Dashboard) */
-        #app-screen { display: none; }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .logo { font-size: 22px; font-weight: 900; color: #047857; }
-
-        .robux-badge {
-            background: #ffffff;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 800;
-            color: #059669;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            border: 1px solid #a7f3d0;
-            font-size: 13px;
-        }
-
-        .search-container { margin-bottom: 15px; }
-        .search-input {
+            transition: background 0.2s;
             width: 100%;
-            padding: 12px 18px;
-            border-radius: 25px;
-            border: 1px solid #a7f3d0;
-            background: rgba(255, 255, 255, 0.9);
-            outline: none;
+        }
+        .btn-play:hover { background-color: #00965e; }
+        
+        /* Formularios y Ajustes */
+        .form-group {
+            margin-bottom: 24px;
+        }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #ccc; }
+        .form-input {
+            width: 100%;
+            max-width: 420px;
+            padding: 12px 16px;
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: white;
+            font-size: 15px;
+        }
+        .form-input:focus { border-color: #0084ff; outline: none; }
+
+        /* Lienzo del Juego en Pantalla Completa (Canvas 3D Simulado) */
+        #game-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            display: none;
+            z-index: 1000;
+        }
+        #gameCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .game-hud {
+            position: absolute;
+            top: 24px; left: 24px;
+            display: flex;
+            gap: 16px;
+            z-index: 1001;
+        }
+        .hud-btn {
+            background: rgba(20, 20, 20, 0.85);
+            border: 1px solid #444;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .hud-btn:hover { background: #e03131; border-color: #ff5252; }
+        
+        .controls-hint {
+            position: absolute;
+            bottom: 24px; left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            padding: 10px 20px;
+            border-radius: 8px;
             font-size: 14px;
-            box-sizing: border-box;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            color: #ccc;
+            pointer-events: none;
+            z-index: 1001;
+            border: 1px solid #333;
         }
-
-        /* Secciones de Categorías Estilo Roblox */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0 10px 0;
-        }
-
-        .section-title { font-size: 16px; font-weight: 800; color: #047857; }
-        .see-all { font-size: 12px; color: #059669; font-weight: 700; cursor: pointer; }
-
-        /* Avatares y Amigos */
-        .horizontal-scroll {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            scrollbar-width: none;
-        }
-        .horizontal-scroll::-webkit-scrollbar { display: none; }
-
-        .avatar-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex-shrink: 0;
-            cursor: pointer;
-        }
-
-        .avatar-circle {
-            width: 60px; height: 60px;
-            border-radius: 50%;
-            background: #ffffff;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 26px;
-            border: 2.5px solid #34d399;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .avatar-text { font-size: 11px; margin-top: 5px; font-weight: 700; color: #065f46; }
-
-        /* Cuadrícula de Juegos y Funciones */
-        .grid-games {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .game-card {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 16px;
-            padding: 12px;
-            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.08);
-            border: 1px solid #a7f3d0;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .game-card:hover { transform: translateY(-2px); }
-
-        .game-thumb {
-            width: 100%; height: 95px;
-            background: linear-gradient(135deg, #a7f3d0, #34d399);
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 30px;
-            margin-bottom: 8px;
-        }
-
-        .game-name { font-size: 13px; font-weight: 800; color: #1f2937; }
-        .game-stats { font-size: 11px; color: #059669; font-weight: 600; margin-top: 3px; }
-
-        /* Barra de Navegación Inferior Completa */
-        .nav-bar {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%;
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            border-top: 1px solid #a7f3d0;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.04);
-            z-index: 100;
-        }
-
-        .nav-btn {
-            background: none; border: none;
-            display: flex; flex-direction: column; align-items: center;
-            font-size: 11px; font-weight: 700; color: #047857;
-            cursor: pointer;
-        }
-        .nav-icon { font-size: 18px; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
-    <!-- Pantalla de Login -->
-    <div id="auth-screen" class="container">
-        <div class="brand-title">Andromeda</div>
-        <button class="btn btn-outline" onclick="openApp()">Crear cuenta</button>
-        <button class="btn btn-solid" onclick="openApp()">Iniciar sesión</button>
-        <div style="margin-top: 25px; font-size: 12px; color: #4b5563; font-weight: 600;">
-            <span>Términos de servicio</span> • <span>Política de privacidad</span>
-        </div>
+    <!-- Menú Lateral -->
+    <div class="sidebar">
+        <div class="logo">ROBLOX</div>
+        <button class="nav-btn active" onclick="switchView('home', this)">🏠 Inicio</button>
+        <button class="nav-btn" onclick="switchView('games', this)">🎮 Descubrir</button>
+        <button class="nav-btn" onclick="switchView('avatar', this)">👕 Tienda Avatar</button>
+        <button class="nav-btn" onclick="switchView('studio', this)">🛠️ Roblox Studio</button>
+        <button class="nav-btn" onclick="switchView('settings', this)">⚙️ Configuración</button>
     </div>
 
-    <!-- Pantalla Principal / Dashboard Estilo Roblox -->
-    <div id="app-screen" class="container" style="display: none;">
-        <div class="top-bar">
-            <div class="logo">Andromeda</div>
-            <div class="robux-badge">💎 1,450 R$</div>
+    <!-- Contenedor Principal -->
+    <div class="main-container">
+        <div class="topbar">
+            <div class="badge">👤 <span id="display-username">RobloxianPro</span></div>
+            <div class="badge">🪙 <span class="robux-val">4,550</span> Robux</div>
         </div>
 
-        <div class="search-container">
-            <input type="text" class="search-input" placeholder="🔍 Buscar experiencias, avatares, mundos...">
-        </div>
-
-        <!-- Sección de Amigos / Avatares -->
-        <div class="section-header">
-            <div class="section-title">Amigos en Línea (4)</div>
-            <div class="see-all">Ver todos</div>
-        </div>
-        <div class="horizontal-scroll">
-            <div class="avatar-card">
-                <div class="avatar-circle">👦</div>
-                <div class="avatar-text">Gaelk (CEO)</div>
-            </div>
-            <div class="avatar-card">
-                <div class="avatar-circle">🤖</div>
-                <div class="avatar-text">AlexBot</div>
-            </div>
-            <div class="avatar-card">
-                <div class="avatar-circle">⚡</div>
-                <div class="avatar-text">TokenX</div>
-            </div>
-            <div class="avatar-card">
-                <div class="avatar-circle">🚀</div>
-                <div class="avatar-text">CyberDev</div>
-            </div>
-            <div class="avatar-card">
-                <div class="avatar-circle">💎</div>
-                <div class="avatar-text">NeonPro</div>
+        <!-- VISTA INICIO -->
+        <div id="view-home" class="view-content active">
+            <h1>Hola, <span id="welcome-username">RobloxianPro</span></h1>
+            <div class="game-card" style="max-width: 450px;">
+                <h3>Adopt Me! & World Sandbox 🏝️</h3>
+                <p>Explora mundos masivos, construye estructuras y chatea con amigos en tiempo real.</p>
+                <button class="btn-play" onclick="startGame('Adopt Me! Sandbox')">▶ JUGAR AHORA</button>
             </div>
         </div>
 
-        <!-- Destacados / Juegos -->
-        <div class="section-header">
-            <div class="section-title">Continuar Jugando / Destacados</div>
-            <div class="see-all">Más</div>
-        </div>
-        <div class="grid-games">
-            <div class="game-card">
-                <div class="game-thumb">🏰</div>
-                <div class="game-name">Andromeda Tycoon</div>
-                <div class="game-stats">🟢 98% • 12.4k jugando</div>
-            </div>
-            <div class="game-card">
-                <div class="game-thumb">⚔️</div>
-                <div class="game-name">Neon Battle Arena</div>
-                <div class="game-stats">🟢 95% • 8.1k jugando</div>
+        <!-- VISTA DESCUBRIR JUEGOS -->
+        <div id="view-games" class="view-content">
+            <h1>Experiencias Populares</h1>
+            <div class="grid">
+                <div class="game-card" onclick="startGame('Bloxburg Town Roleplay')">
+                    <h3>Bloxburg Town</h3>
+                    <p>94.2K Jugando • Roleplay y Construcción</p>
+                    <button class="btn-play">Entrar</button>
+                </div>
+                <div class="game-card" onclick="startGame('BedWars PvP Arena')">
+                    <h3>BedWars PvP</h3>
+                    <p>61.5K Jugando • Acción y Combate</p>
+                    <button class="btn-play">Entrar</button>
+                </div>
+                <div class="game-card" onclick="startGame('Tower of Hell')">
+                    <h3>Tower of Hell</h3>
+                    <p>53.1K Jugando • Parkour Extremo</p>
+                    <button class="btn-play">Entrar</button>
+                </div>
+                <div class="game-card" onclick="startGame('Brookhaven RP')">
+                    <h3>Brookhaven RP</h3>
+                    <p>120.4K Jugando • Ciudad Libre</p>
+                    <button class="btn-play">Entrar</button>
+                </div>
             </div>
         </div>
 
-        <!-- Creados por la comunidad -->
-        <div class="section-header">
-            <div class="section-title">Populares y Simuladores</div>
-            <div class="see-all">Ver más</div>
-        </div>
-        <div class="grid-games">
-            <div class="game-card">
-                <div class="game-thumb">🚀</div>
-                <div class="game-name">Space Mining Simulator</div>
-                <div class="game-stats">🟢 91% • 5.3k jugando</div>
-            </div>
-            <div class="game-card">
-                <div class="game-thumb">🎨</div>
-                <div class="game-name">Catalog Avatar Creator</div>
-                <div class="game-stats">🟢 99% • 24.9k jugando</div>
+        <!-- VISTA TIENDA AVATAR -->
+        <div id="view-avatar" class="view-content">
+            <h1>Editor de Avatar</h1>
+            <p style="color: #999; margin-bottom: 24px;">Personaliza la apariencia de tu personaje estilo bloque.</p>
+            <div style="display: flex; gap: 40px; align-items: center;">
+                <div id="avatar-preview" style="width: 150px; height: 220px; background: #0084ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">Avatar</div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <label style="font-weight: 600;">Color de Ropa:</label>
+                    <button class="btn-play" style="background-color: #0084ff;" onclick="setAvatarColor('#0084ff')">Azul Clásico</button>
+                    <button class="btn-play" style="background-color: #00b06f;" onclick="setAvatarColor('#00b06f')">Verde Roblox</button>
+                    <button class="btn-play" style="background-color: #e03131;" onclick="setAvatarColor('#e03131')">Rojo Fuego</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Menú Inferior Estilo Roblox (Todas las funciones) -->
-    <div class="nav-bar" id="nav-menu" style="display: none;">
-        <button class="nav-btn" onclick="openApp()">
-            <span class="nav-icon">🏠</span>Inicio
-        </button>
-        <button class="nav-btn" onclick="alert('Abriendo Marketplace / Tienda de Avatares...')">
-            <span class="nav-icon">🛒</span>Mercado
-        </button>
-        <button class="nav-btn" onclick="alert('Abriendo sección de Creaciones / Studio...')">
-            <span class="nav-icon">🛠️</span>Crear
-        </button>
-        <button class="nav-btn" onclick="alert('Abriendo sección de Robux y Pases...')">
-            <span class="nav-icon">💎</span>Robux
-        </button>
-        <button class="nav-btn" onclick="logout()" style="color: #dc2626;">
-            <span class="nav-icon">🚪</span>Salir
-        </button>
+        <!-- VISTA ROBLOX STUDIO -->
+        <div id="view-studio" class="view-content">
+            <h1>Roblox Studio</h1>
+            <p style="color: #999; margin-bottom: 24px;">Crea tus propios mundos virtuales en 3D y compártelos.</p>
+            <button class="btn-play" style="max-width: 300px; background-color: #0084ff;" onclick="startGame('Studio Baseplate Sandbox')">Abrir Baseplate en Blanco</button>
+        </div>
+
+        <!-- VISTA CONFIGURACIÓN -->
+        <div id="view-settings" class="view-content">
+            <h1>Configuración de Cuenta</h1>
+            <div class="form-group">
+                <label>Nombre de Usuario:</label>
+                <input type="text" id="username-input" class="form-input" value="RobloxianPro" oninput="updateUsername(this.value)">
+            </div>
+            <div class="form-group">
+                <label>Calidad de Gráficos:</label>
+                <input type="range" min="1" max="5" value="3" class="form-input" style="cursor: pointer;">
+            </div>
+        </div>
+
+        <!-- PANTALLA DE JUEGO ACTIVO (CANVAS 3D) -->
+        <div id="game-overlay">
+            <div class="game-hud">
+                <button class="hud-btn" onclick="stopGame()">✕ Salir (ESC)</button>
+                <div class="badge" id="current-game-title-hud">Cargando Experiencia...</div>
+            </div>
+            <div class="controls-hint">Usa las teclas <b>W, A, S, D</b> o <b>Flechas</b> para moverte y girar la cámara.</div>
+            <canvas id="gameCanvas"></canvas>
+        </div>
     </div>
 
     <script>
-        function openApp() {
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('app-screen').style.display = 'block';
-            document.getElementById('nav-menu').style.display = 'flex';
+        function switchView(viewName, btnElement) {
+            document.querySelectorAll('.view-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('view-' + viewName).classList.add('active');
+            btnElement.classList.add('active');
         }
 
-        function logout() {
-            document.getElementById('auth-screen').style.display = 'flex';
-            document.getElementById('app-screen').style.display = 'none';
-            document.getElementById('nav-menu').style.display = 'none';
+        function updateUsername(val) {
+            const name = val.trim() || "Robloxian";
+            document.getElementById('display-username').innerText = name;
+            document.getElementById('welcome-username').innerText = name;
         }
+
+        function setAvatarColor(color) {
+            document.getElementById('avatar-preview').style.backgroundColor = color;
+        }
+
+        /* Motor 3D Integrado de Juego en Tiempo Real */
+        let gameActive = false;
+        let canvas, ctx;
+        let player = { x: 5, y: 5, angle: 0 };
+        
+        function startGame(title) {
+            document.getElementById('current-game-title-hud').innerText = "🎮 " + title;
+            document.getElementById('game-overlay').style.display = 'block';
+            gameActive = true;
+            
+            canvas = document.getElementById('gameCanvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            ctx = canvas.getContext('2d');
+            
+            window.addEventListener('keydown', handleKeyDown);
+            requestAnimationFrame(gameLoop);
+        }
+
+        function stopGame() {
+            document.getElementById('game-overlay').style.display = 'none';
+            gameActive = false;
+            window.removeEventListener('keydown', handleKeyDown);
+        }
+
+        function handleKeyDown(e) {
+            if (!gameActive) return;
+            const moveSpeed = 0.25;
+            const rotSpeed = 0.1;
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') player.angle -= rotSpeed;
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') player.angle += rotSpeed;
+            if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+                player.x += Math.cos(player.angle) * moveSpeed;
+                player.y += Math.sin(player.angle) * moveSpeed;
+            }
+            if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+                player.x -= Math.cos(player.angle) * moveSpeed;
+                player.y -= Math.sin(player.angle) * moveSpeed;
+            }
+            if (e.key === 'Escape') stopGame();
+        }
+
+        function gameLoop() {
+            if (!gameActive) return;
+            
+            // Renderizado de Cielo y Suelo en perspectiva
+            ctx.fillStyle = "#1e88e5";
+            ctx.fillRect(0, 0, canvas.width, canvas.height / 2);
+            ctx.fillStyle = "#2e7d32";
+            ctx.fillRect(0, canvas.height / 2, canvas.width, canvas.height / 2);
+
+            // Simulación de entorno tridimensional mediante raycasting clásico optimizado
+            let fov = Math.PI / 3;
+            let numRays = 120;
+            let rayAngle = player.angle - fov / 2;
+            let stripWidth = canvas.width / numRays;
+
+            for (let i = 0; i < numRays; i++) {
+                let depth = 0;
+                let hitWall = false;
+                while (!hitWall && depth < 12) {
+                    depth += 0.15;
+                    let testX = Math.floor(player.x + Math.cos(rayAngle) * depth);
+                    let testY = Math.floor(player.y + Math.sin(rayAngle) * depth);
+                    if (testX < 0 || testX > 12 || testY < 0 || testY > 12) hitWall = true;
+                }
+                
+                let wallHeight = Math.min(canvas.height, canvas.height / (depth + 0.02));
+                let brightness = Math.max(20, 220 - depth * 16);
+                ctx.fillStyle = `rgb(${brightness}, ${brightness * 0.8}, ${brightness * 0.5})`;
+                ctx.fillRect(i * stripWidth, (canvas.height - wallHeight) / 2, stripWidth + 1, wallHeight);
+                
+                rayAngle += fov / numRays;
+            }
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        window.addEventListener('resize', () => {
+            if (canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        });
     </script>
 </body>
 </html>
