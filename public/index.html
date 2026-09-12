@@ -3,296 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andromeda</title>
+    <title>Andromeda - Roblox Ecosystem</title>
     <style>
-        /* Fondo animado degradado en verde clarito y blanco */
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #e8f5e9, #ffffff, #c8e6c9, #f1f8e9);
+            background: linear-gradient(135deg, #d1fae5, #ffffff, #a7f3d0, #ecfdf5);
             background-size: 400% 400%;
-            animation: gradientBG 12s ease infinite;
-            color: #333;
+            animation: gradientAnimation 12s ease infinite;
+            color: #1f2937;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        @keyframes gradientBG {
+        @keyframes gradientAnimation {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
         .container {
-            padding: 20px;
+            padding: 15px;
             max-width: 600px;
             margin: 0 auto;
             flex: 1;
             width: 100%;
             box-sizing: border-box;
+            padding-bottom: 90px;
         }
 
-        /* Pantalla de bienvenida / Login */
+        /* Autenticación */
         #auth-screen {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 90vh;
+            height: 85vh;
             text-align: center;
+        }
+
+        .brand-title {
+            font-size: 40px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #047857, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
         }
 
         .btn {
             width: 100%;
-            max-width: 320px;
+            max-width: 300px;
             padding: 14px;
-            margin: 10px 0;
+            margin: 8px 0;
             border-radius: 25px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
             border: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
         }
 
-        .btn:active {
-            transform: scale(0.98);
-        }
+        .btn:active { transform: scale(0.97); }
+        .btn-outline { background-color: #ffffff; color: #047857; border: 2px solid #34d399; }
+        .btn-solid { background: linear-gradient(135deg, #059669, #10b981); color: white; }
 
-        .btn-white {
-            background-color: #ffffff;
-            color: #2e7d32;
-            border: 2px solid #a5d6a7;
-        }
+        /* Pantalla Principal (Dashboard) */
+        #app-screen { display: none; }
 
-        .btn-green {
-            background: linear-gradient(135deg, #4caf50, #2e7d32);
-            color: white;
-        }
-
-        /* Dashboard principal */
-        #app-screen {
-            display: none;
-        }
-
-        .header-flex {
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
-        h1.logo {
-            color: #2e7d32;
-            font-size: 24px;
-            margin: 0;
-        }
+        .logo { font-size: 22px; font-weight: 900; color: #047857; }
 
-        .search-box {
-            padding: 10px 15px;
+        .robux-badge {
+            background: #ffffff;
+            padding: 6px 12px;
             border-radius: 20px;
-            border: 1px solid #c8e6c9;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(5px);
+            font-weight: 800;
+            color: #059669;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border: 1px solid #a7f3d0;
+            font-size: 13px;
+        }
+
+        .search-container { margin-bottom: 15px; }
+        .search-input {
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 25px;
+            border: 1px solid #a7f3d0;
+            background: rgba(255, 255, 255, 0.9);
             outline: none;
             font-size: 14px;
-            width: 150px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
-        .welcome-text {
-            font-weight: 600;
-            color: #4f5d53;
-            margin-bottom: 15px;
-            font-size: 15px;
-        }
-
-        /* Avatares / Stickers mejorados */
-        .avatars-container {
+        /* Secciones de Categorías Estilo Roblox */
+        .section-header {
             display: flex;
-            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0 10px 0;
+        }
+
+        .section-title { font-size: 16px; font-weight: 800; color: #047857; }
+        .see-all { font-size: 12px; color: #059669; font-weight: 700; cursor: pointer; }
+
+        /* Avatares y Amigos */
+        .horizontal-scroll {
+            display: flex;
+            gap: 12px;
             overflow-x: auto;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
             scrollbar-width: none;
         }
+        .horizontal-scroll::-webkit-scrollbar { display: none; }
 
-        .avatars-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .avatar-item {
+        .avatar-card {
             display: flex;
             flex-direction: column;
             align-items: center;
-            cursor: pointer;
             flex-shrink: 0;
+            cursor: pointer;
         }
 
         .avatar-circle {
-            width: 65px;
-            height: 65px;
+            width: 60px; height: 60px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #a5d6a7, #81c784);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 4px 8px rgba(46, 125, 50, 0.15);
-            border: 2px solid #ffffff;
-            transition: transform 0.2s;
+            background: #ffffff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px;
+            border: 2.5px solid #34d399;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
+        .avatar-text { font-size: 11px; margin-top: 5px; font-weight: 700; color: #065f46; }
 
-        .avatar-item:hover .avatar-circle {
-            transform: scale(1.05);
-        }
-
-        .avatar-name {
-            font-size: 12px;
-            margin-top: 6px;
-            color: #388e3c;
-            font-weight: bold;
-        }
-
-        /* Tarjetas destacadas */
-        .section-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2e7d32;
-            margin: 25px 0 12px 0;
-        }
-
-        .cards-grid {
+        /* Cuadrícula de Juegos y Funciones */
+        .grid-games {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
+        .game-card {
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 16px;
-            padding: 15px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
-            border: 1px solid #e0f2f1;
+            padding: 12px;
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.08);
+            border: 1px solid #a7f3d0;
+            cursor: pointer;
             transition: transform 0.2s;
         }
+        .game-card:hover { transform: translateY(-2px); }
 
-        .card:hover {
-            transform: translateY(-3px);
-        }
-
-        .card-img {
-            width: 100%;
-            height: 90px;
-            background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+        .game-thumb {
+            width: 100%; height: 95px;
+            background: linear-gradient(135deg, #a7f3d0, #34d399);
             border-radius: 10px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px;
+            margin-bottom: 8px;
         }
 
-        .card-title {
-            font-size: 13px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
+        .game-name { font-size: 13px; font-weight: 800; color: #1f2937; }
+        .game-stats { font-size: 11px; color: #059669; font-weight: 600; margin-top: 3px; }
 
-        /* Barra de navegación inferior */
+        /* Barra de Navegación Inferior Completa */
         .nav-bar {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.9);
+            bottom: 0; left: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.96);
             backdrop-filter: blur(10px);
             display: flex;
             justify-content: space-around;
-            padding: 12px 0;
-            border-top: 1px solid #c8e6c9;
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
+            padding: 10px 0;
+            border-top: 1px solid #a7f3d0;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.04);
+            z-index: 100;
         }
 
-        .nav-item {
-            background: none;
-            border: none;
-            font-size: 13px;
-            font-weight: bold;
-            color: #2e7d32;
+        .nav-btn {
+            background: none; border: none;
+            display: flex; flex-direction: column; align-items: center;
+            font-size: 11px; font-weight: 700; color: #047857;
             cursor: pointer;
         }
+        .nav-icon { font-size: 18px; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
-    <!-- Pantalla de Inicio de Sesión -->
+    <!-- Pantalla de Login -->
     <div id="auth-screen" class="container">
-        <h1 style="color: #2e7d32; margin-bottom: 30px; font-size: 32px;">Andromeda</h1>
-        <button class="btn btn-white" onclick="showApp()">Crear cuenta</button>
-        <button class="btn btn-green" onclick="showApp()">Iniciar sesión</button>
-        <div style="margin-top: 25px; font-size: 12px; color: #666;">
-            <span style="margin: 0 10px; cursor:pointer;">Términos</span> • 
-            <span style="margin: 0 10px; cursor:pointer;">Privacidad</span>
+        <div class="brand-title">Andromeda</div>
+        <button class="btn btn-outline" onclick="openApp()">Crear cuenta</button>
+        <button class="btn btn-solid" onclick="openApp()">Iniciar sesión</button>
+        <div style="margin-top: 25px; font-size: 12px; color: #4b5563; font-weight: 600;">
+            <span>Términos de servicio</span> • <span>Política de privacidad</span>
         </div>
     </div>
 
-    <!-- Pantalla Principal de Juegos / Dashboard -->
-    <div id="app-screen" class="container" style="display: none; padding-bottom: 80px;">
-        <div class="header-flex">
-            <h1 class="logo">Andromeda</h1>
-            <input type="text" class="search-box" placeholder="Buscar juegos...">
+    <!-- Pantalla Principal / Dashboard Estilo Roblox -->
+    <div id="app-screen" class="container" style="display: none;">
+        <div class="top-bar">
+            <div class="logo">Andromeda</div>
+            <div class="robux-badge">💎 1,450 R$</div>
         </div>
 
-        <div class="welcome-text">¡Bienvenido, CEO! (Personaje Niño)</div>
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="🔍 Buscar experiencias, avatares, mundos...">
+        </div>
 
-        <!-- Avatares / Stickers con estilo circular llamativo -->
-        <div class="avatars-container">
-            <div class="avatar-item">
+        <!-- Sección de Amigos / Avatares -->
+        <div class="section-header">
+            <div class="section-title">Amigos en Línea (4)</div>
+            <div class="see-all">Ver todos</div>
+        </div>
+        <div class="horizontal-scroll">
+            <div class="avatar-card">
                 <div class="avatar-circle">👦</div>
-                <div class="avatar-name">Gaelk</div>
+                <div class="avatar-text">Gaelk (CEO)</div>
             </div>
-            <div class="avatar-item">
+            <div class="avatar-card">
                 <div class="avatar-circle">🤖</div>
-                <div class="avatar-name">Alex</div>
+                <div class="avatar-text">AlexBot</div>
             </div>
-            <div class="avatar-item">
+            <div class="avatar-card">
                 <div class="avatar-circle">⚡</div>
-                <div class="avatar-name">TokenX</div>
+                <div class="avatar-text">TokenX</div>
             </div>
-            <div class="avatar-item">
+            <div class="avatar-card">
                 <div class="avatar-circle">🚀</div>
-                <div class="avatar-name">Cyber</div>
+                <div class="avatar-text">CyberDev</div>
             </div>
-            <div class="avatar-item">
+            <div class="avatar-card">
                 <div class="avatar-circle">💎</div>
-                <div class="avatar-name">Neon</div>
+                <div class="avatar-text">NeonPro</div>
             </div>
         </div>
 
-        <div class="section-title">Destacados para ti</div>
-
-        <div class="cards-grid">
-            <div class="card">
-                <div class="card-img">🎮</div>
-                <div class="card-title">Andromeda Tycoon</div>
+        <!-- Destacados / Juegos -->
+        <div class="section-header">
+            <div class="section-title">Continuar Jugando / Destacados</div>
+            <div class="see-all">Más</div>
+        </div>
+        <div class="grid-games">
+            <div class="game-card">
+                <div class="game-thumb">🏰</div>
+                <div class="game-name">Andromeda Tycoon</div>
+                <div class="game-stats">🟢 98% • 12.4k jugando</div>
             </div>
-            <div class="card">
-                <div class="card-img">⚔️</div>
-                <div class="card-title">Neon Battle Arena</div>
+            <div class="game-card">
+                <div class="game-thumb">⚔️</div>
+                <div class="game-name">Neon Battle Arena</div>
+                <div class="game-stats">🟢 95% • 8.1k jugando</div>
+            </div>
+        </div>
+
+        <!-- Creados por la comunidad -->
+        <div class="section-header">
+            <div class="section-title">Populares y Simuladores</div>
+            <div class="see-all">Ver más</div>
+        </div>
+        <div class="grid-games">
+            <div class="game-card">
+                <div class="game-thumb">🚀</div>
+                <div class="game-name">Space Mining Simulator</div>
+                <div class="game-stats">🟢 91% • 5.3k jugando</div>
+            </div>
+            <div class="game-card">
+                <div class="game-thumb">🎨</div>
+                <div class="game-name">Catalog Avatar Creator</div>
+                <div class="game-stats">🟢 99% • 24.9k jugando</div>
             </div>
         </div>
     </div>
 
-    <!-- Menú Inferior -->
+    <!-- Menú Inferior Estilo Roblox (Todas las funciones) -->
     <div class="nav-bar" id="nav-menu" style="display: none;">
-        <button class="nav-item" onclick="showApp()">🏠 Inicio</button>
-        <button class="nav-item" onclick="logout()" style="color: #d32f2f;">🚪 Salir</button>
+        <button class="nav-btn" onclick="openApp()">
+            <span class="nav-icon">🏠</span>Inicio
+        </button>
+        <button class="nav-btn" onclick="alert('Abriendo Marketplace / Tienda de Avatares...')">
+            <span class="nav-icon">🛒</span>Mercado
+        </button>
+        <button class="nav-btn" onclick="alert('Abriendo sección de Creaciones / Studio...')">
+            <span class="nav-icon">🛠️</span>Crear
+        </button>
+        <button class="nav-btn" onclick="alert('Abriendo sección de Robux y Pases...')">
+            <span class="nav-icon">💎</span>Robux
+        </button>
+        <button class="nav-btn" onclick="logout()" style="color: #dc2626;">
+            <span class="nav-icon">🚪</span>Salir
+        </button>
     </div>
 
     <script>
-        function showApp() {
+        function openApp() {
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'block';
             document.getElementById('nav-menu').style.display = 'flex';
